@@ -1,27 +1,29 @@
-name: Deploy on Push to Production Branch
+name: deploy on push production branch
+
 on:
   push:
     branches:
-      - prod  # 仅在推送到 prod 分支时触发部署
+      - prod
+
 jobs:
   deploy-app:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: check out the code to build server
         uses: actions/checkout@v3
 
-      # 新增：针对 Ubuntu 24+，设置 /var/www/html 目录所有者为 ubuntu 用户
-      - name: Set ubuntu user as owner of /var/www/html (for Ubuntu 24+)
-        if: runner.os == 'Linux' && contains(runner.version, '24')  # 条件判断，仅 Ubuntu 24+ 执行
+      # 新增：临时更改目录所有者为 ubuntu
+      - name: set the ubuntu user as the owner of the /var/www/html directory for ubuntu 24+
         uses: appleboy/ssh-action@v1.2.0
         with:
-          host: ${{ secrets.PROD_HOST }}  # 注意：若原 secrets 是 HOST，需对应修改，这里保持和 prod 环境一致用 PROD_HOST
+          host: ${{ secrets.PROD_HOST }}
           username: ${{ secrets.SSH_USER_NAME }}
+          port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            sudo chown -R ubuntu /var/www/html  # 修改目录所有者为 ubuntu 用户
+            sudo chown -R ubuntu /var/www/html
 
-      - name: Copy files to server
+      - name: copy file to server
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.PROD_HOST }}
@@ -31,3 +33,14 @@ jobs:
           source: "./html/*"
           target: "/var/www/html"
           strip_components: 1
+
+      # 新增：恢复目录所有者为 root
+      - name: set the root user back as the owner of the /var/www/html directory for ubuntu 24+
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.PROD_HOST }}
+          username: ${{ secrets.SSH_USER_NAME }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            sudo chown -R root /var/www/html
