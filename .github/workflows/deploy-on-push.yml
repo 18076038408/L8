@@ -7,7 +7,7 @@ jobs:
       - name: check out the code to build server
         uses: actions/checkout@v4
       - name: copy file to server
-        uses: appleboy/scp-action@v0.5.0 # 固定为相对稳定版本，你可根据实际最新稳定版调整
+        uses: appleboy/scp-action@v0.6.0 # 固定为相对稳定版本，你可根据实际最新稳定版调整
         with:
           host: ${{secrets.HOST}}
           username: ${{secrets.SSH_USER_NAME}}
