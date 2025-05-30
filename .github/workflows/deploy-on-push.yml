@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v4  # 该 Action 版本较稳定，若有问题可看官方文档换版本
 
       - name: Copy files to server
-        uses: appleboy/scp-action@v0.18.2  # 替换为稳定版本，避免 master 分支的不确定性
+        uses: appleboy/scp-action@v1.0.0  # 替换为稳定版本，避免 master 分支的不确定性
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.SSH_USER_NAME }}
