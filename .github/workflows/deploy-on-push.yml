@@ -7,13 +7,12 @@ jobs:
       - name: check out the code to build server
         uses: actions/checkout@v4
       - name: copy file to server
-        uses: appleboy/scp-action@v1.0.0
+        uses: appleboy/scp-action@v1.0.0 # 固定为相对稳定版本，你可根据实际最新稳定版调整
         with:
-        host: ${{secrets.HOST}}
-        username: ${{secrets.SSH_USER_NAME}}
-        port: ${{secrets.SSH_PORT}}
-        key: ${{secrets.SSH_KEY}}
-        source: "./html/*"
-        target: "/var/www/html"
-        strip_components: 1
-        timeout: "60s" # 假设将超时时间设置为60秒，可根据实际情况调整
+          host: ${{secrets.HOST}}
+          username: ${{secrets.SSH_USER_NAME}}
+          port: ${{secrets.SSH_PORT}}
+          key: ${{secrets.SSH_KEY}}
+          source: "./html/*"
+          target: "/var/www/html"
+          strip_components: 1
