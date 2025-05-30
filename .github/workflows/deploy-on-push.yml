@@ -2,17 +2,17 @@ name: Deploy on Push
 
 on:
   push:
-    branches: [ main ]  # 可根据需要修改分支名称
+    branches: [ main ]  # 可按需修改触发分支，如 master 等
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-        
+        uses: actions/checkout@v4  # 该 Action 版本较稳定，若有问题可看官方文档换版本
+
       - name: Copy files to server
-        uses: appleboy/scp-action@master
+        uses: appleboy/scp-action@v0.18.2  # 替换为稳定版本，避免 master 分支的不确定性
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.SSH_USER_NAME }}
@@ -21,3 +21,4 @@ jobs:
           source: "./html/*"
           target: "/var/www/html"
           strip_components: 1
+          timeout: 300  # 新增超时配置，单位秒，可根据实际网络情况调整，比如 300 秒即 5 分钟
