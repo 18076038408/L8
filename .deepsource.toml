@@ -1,1 +1,11 @@
 version = 1
+
+[[analyzers]]
+name = "java"
+enabled = true
+
+[analyzers.meta]
+# Java 项目测试文件路径匹配（适配 src/test/java 结构）
+test_file_patterns = ["src/test/java/**/*Test.java", "src/test/java/**/*Tests.java"]
+# Java 项目需排除的文件/目录（编译产物、IDE 配置等）
+excluded_file_patterns = ["target/**", ".idea/**", "**/*.class"]
